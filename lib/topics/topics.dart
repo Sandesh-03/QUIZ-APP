@@ -6,8 +6,8 @@ import 'package:quizapp/shared/loading.dart';
 import 'package:quizapp/topics/topic_item.dart';
 
 class TopicsScreen extends StatelessWidget {
-  final String courseCode;
-  const TopicsScreen({super.key, required this.courseCode});
+  final String? courseCode;
+  const TopicsScreen({super.key,  this.courseCode});
 
   @override
   Widget build(BuildContext context) {

@@ -41,24 +41,37 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
                 child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 2,
+                    ),
+                  ),
                   height: size.height / 3,
-                  width: double.infinity,
+                  width: size.width / 1.1,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Image.asset(
-                        'assets/covers/default-cover.png',
-                        fit: BoxFit.fill,
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 10, right: 10),
-                        child: Text(
-                          "Basic Physics",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                      Flexible(
+                        child: SizedBox(
+                          child: Image.asset(
+                            'assets/ph.jpeg',
+                            fit: BoxFit.fill,
                           ),
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
+                        ),
+                      ),
+                      const Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 10, right: 10),
+                          child: Text(
+                            "Basic Physics",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.fade,
+                            softWrap: false,
+                          ),
                         ),
                       ),
                       // Flexible(child: TopicProgress(topic: topic)),
@@ -77,32 +90,43 @@ class HomeScreen extends StatelessWidget {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (BuildContext context) => const TopicsScreen(
-                        courseCode: 'Basic Maths',
+                        courseCode: 'Basic Chemistry',
                       ),
                     ),
                   );
                 },
                 child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 2,
+                    ),
+                  ),
                   height: size.height / 3,
-                  width: double.infinity,
+                  width: size.width / 1.1,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      SizedBox(
-                        child: Image.asset(
-                          'assets/covers/default-cover.png',
-                          fit: BoxFit.contain,
+                      Flexible(
+                        child: SizedBox(
+                          child: Image.asset(
+                            'assets/chem.jpeg',
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 10, right: 10),
-                        child: Text(
-                          "Basic Chemistry",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                      const Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 10, right: 10),
+                          child: Text(
+                            "Basic Chemistry",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.fade,
+                            softWrap: false,
                           ),
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
                         ),
                       ),
                       // Flexible(child: TopicProgress(topic: topic)),

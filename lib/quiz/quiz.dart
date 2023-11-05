@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/quiz/quiz_state.dart';
@@ -6,6 +7,8 @@ import 'package:quizapp/services/firestore.dart';
 import 'package:quizapp/services/models.dart';
 import 'package:quizapp/shared/loading.dart';
 import 'package:quizapp/shared/progress_bar.dart';
+
+var score;
 
 class QuizScreen extends StatelessWidget {
   const QuizScreen({super.key, required this.quizId});
@@ -43,7 +46,7 @@ class QuizScreen extends StatelessWidget {
                   if (idx == 0) {
                     return StartPage(quiz: quiz);
                   } else if (idx == quiz.questions.length + 1) {
-                    return CongratsPage(quiz: quiz);
+                    return CongratsPage(quiz: quiz, score: score);
                   } else {
                     return QuestionPage(question: quiz.questions[idx - 1]);
                   }
@@ -77,7 +80,10 @@ class StartPage extends StatelessWidget {
             alignment: MainAxisAlignment.center,
             children: <Widget>[
               ElevatedButton.icon(
-                onPressed: state.nextPage,
+                onPressed: () {
+                  score = 0;
+                  state.nextPage();
+                },
                 label: const Text('Start Quiz!'),
                 icon: const Icon(Icons.poll),
               )
@@ -91,7 +97,8 @@ class StartPage extends StatelessWidget {
 
 class CongratsPage extends StatelessWidget {
   final Quiz quiz;
-  const CongratsPage({super.key, required this.quiz});
+  final int score;
+  const CongratsPage({super.key, required this.quiz, required this.score});
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +109,10 @@ class CongratsPage extends StatelessWidget {
         children: [
           Text(
             'Congrats! You completed the ${quiz.title} quiz',
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            'Score : $score',
             textAlign: TextAlign.center,
           ),
           const Divider(),
@@ -117,7 +128,7 @@ class CongratsPage extends StatelessWidget {
               FirestoreService().updateUserReport(quiz);
               Navigator.pushNamedAndRemoveUntil(
                 context,
-                '/topics',
+                '/',
                 (route) => false,
               );
             },
@@ -128,9 +139,24 @@ class CongratsPage extends StatelessWidget {
   }
 }
 
-class QuestionPage extends StatelessWidget {
+class QuestionPage extends StatefulWidget {
   final Question question;
   const QuestionPage({super.key, required this.question});
+
+  @override
+  _QuestionPageState createState() => _QuestionPageState();
+}
+
+class _QuestionPageState extends State<QuestionPage> {
+  @override
+  void initState() {
+    super.initState();
+    disableCapture();
+  }
+
+  disableCapture() async {
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,14 +169,14 @@ class QuestionPage extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(16),
             alignment: Alignment.center,
-            child: Text(question.text),
+            child: Text(widget.question.text),
           ),
         ),
         Container(
           padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: question.options.map((opt) {
+            children: widget.question.options.map((opt) {
               return Container(
                 height: 90,
                 margin: const EdgeInsets.only(bottom: 10),
@@ -199,21 +225,27 @@ class QuestionPage extends StatelessWidget {
       builder: (BuildContext context) {
         return Container(
           height: 250,
+          width: double.infinity,
           padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(correct ? 'Good Job!' : 'Wrong'),
+              Text(
+                correct ? 'Good Job!' : 'Wrong',
+                style: correct
+                    ? const TextStyle(color: Colors.green)
+                    : const TextStyle(color: Colors.red),
+              ),
               Text(
                 opt.detail,
                 style: const TextStyle(fontSize: 18, color: Colors.white54),
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: Colors.green),
-                child: Text(
-                  correct ? 'Onward!' : 'Next',
-                  style: const TextStyle(
+                child: const Text(
+                  'Next',
+                  style: TextStyle(
                     color: Colors.white,
                     letterSpacing: 1.5,
                     fontWeight: FontWeight.bold,
@@ -222,6 +254,9 @@ class QuestionPage extends StatelessWidget {
                 onPressed: () {
                   if (correct) {
                     state.nextPage();
+                    setState(() {
+                      score++;
+                    });
                   }
                   state.nextPage();
                   Navigator.pop(context);

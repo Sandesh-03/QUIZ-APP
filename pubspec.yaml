@@ -44,6 +44,7 @@ dependencies:
   provider: ^6.0.5
   rxdart: ^0.27.7
   json_annotation: ^4.5.0
+  flutter_windowmanager: ^0.2.0
 
 dev_dependencies:
   flutter_test:
