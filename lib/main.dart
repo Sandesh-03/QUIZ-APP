@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:provider/provider.dart';
 import 'package:quizapp/routes.dart';
 import 'package:quizapp/services/services.dart';
@@ -7,10 +8,12 @@ import 'package:quizapp/shared/shared.dart';
 import 'package:quizapp/theme.dart';
 import 'firebase_options.dart';
 
-void main() async{
-
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+   Stripe.publishableKey =
+  "pk_test_51OAcwsSGBnUWlyB8i8LFDncrV6ilMHSmj78WfCcLbDaxyq5pLpt7CaEMb8H4E1KcSe3KnYvLSH0IzygQa3EfiTY600Fb0guk08";
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(const App());
 }
 
@@ -24,7 +27,6 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-
   );
 
   @override
@@ -45,7 +47,6 @@ class _AppState extends State<App> {
             catchError: (_, err) => Report(),
             initialData: Report(),
             child: MaterialApp(
-
                 debugShowCheckedModeBanner: false,
                 initialRoute: '/login',
                 routes: appRoutes,
@@ -54,9 +55,7 @@ class _AppState extends State<App> {
         }
 
         // Otherwise, show something whilst waiting for initialization to complete
-        return const MaterialApp(
-            home: LoadingScreen()
-        );
+        return const MaterialApp(home: LoadingScreen());
       },
     );
   }

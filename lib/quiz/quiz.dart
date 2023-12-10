@@ -11,20 +11,22 @@ import 'package:quizapp/shared/progress_bar.dart';
 var score;
 
 class QuizScreen extends StatelessWidget {
-  const QuizScreen({super.key, required this.quizId});
+  const QuizScreen({Key? key, required this.quizId}) : super(key: key);
   final String quizId;
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => QuizState(),
-      child: FutureBuilder<Quiz>(
-        future: FirestoreService().getQuiz(quizId),
+      child: StreamBuilder<Quiz>(
+        stream: FirestoreService().getQuiz(quizId).asStream(),
         builder: (context, snapshot) {
           var state = Provider.of<QuizState>(context);
 
-          if (!snapshot.hasData || snapshot.hasError) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Loader();
+          } else if (snapshot.hasError) {
+            return const Text('Error occurred');
           } else {
             var quiz = snapshot.data!;
 
@@ -32,7 +34,7 @@ class QuizScreen extends StatelessWidget {
               appBar: AppBar(
                 title: AnimatedProgressbar(value: state.progress),
                 leading: IconButton(
-                  icon: const Icon(FontAwesomeIcons.xmark),
+                  icon: const Icon(FontAwesomeIcons.times),
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
@@ -115,8 +117,6 @@ class CongratsPage extends StatelessWidget {
             'Score : $score',
             textAlign: TextAlign.center,
           ),
-          const Divider(),
-          Image.asset('assets/congrats.gif'),
           const Divider(),
           ElevatedButton.icon(
             style: TextButton.styleFrom(

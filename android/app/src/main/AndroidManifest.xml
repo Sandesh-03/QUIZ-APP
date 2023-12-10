@@ -3,6 +3,7 @@
         android:label="quizapp"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        android:theme="@style/Theme.AppCompat.Light">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -29,5 +30,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
     </application>
 </manifest>

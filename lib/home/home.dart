@@ -28,6 +28,7 @@ class HomeScreen extends StatelessWidget {
         ),
         body: Column(
           children: [
+            Container(),
             Padding(
               padding: EdgeInsets.all(pad),
               child: InkWell(
@@ -57,7 +58,7 @@ class HomeScreen extends StatelessWidget {
                         child: SizedBox(
                           child: Image.asset(
                             'assets/ph.jpeg',
-                            fit: BoxFit.fill,
+                            fit: BoxFit.contain,
                           ),
                         ),
                       ),
@@ -112,7 +113,7 @@ class HomeScreen extends StatelessWidget {
                         child: SizedBox(
                           child: Image.asset(
                             'assets/chem.jpeg',
-                            fit: BoxFit.fill,
+                            fit: BoxFit.contain,
                           ),
                         ),
                       ),

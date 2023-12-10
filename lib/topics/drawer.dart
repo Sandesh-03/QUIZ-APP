@@ -46,9 +46,50 @@ class QuizList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool hasPurchasedCourse = true;
+    // Replace this with your logic to check if the user has purchased the course or not
+
     return Column(
       children: topic.quizzes.map(
         (quiz) {
+          bool isTestFree = quiz.id ==
+              topic.quizzes.first
+                  .id; // Check if it's the first test (which is free)
+
+          if (!hasPurchasedCourse && !isTestFree) {
+            return Card(
+              shape:
+                  const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+              elevation: 4,
+              margin: const EdgeInsets.all(4),
+              child: InkWell(
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                          'Please purchase the course to unlock this test'),
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  child: ListTile(
+                    title: Text(
+                      quiz.title,
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                    subtitle: Text(
+                      quiz.description,
+                      overflow: TextOverflow.fade,
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                    leading: QuizBadge(topic: topic, quizId: quiz.id),
+                  ),
+                ),
+              ),
+            ); // Return an empty container to hide the test
+          }
+
           return Card(
             shape:
                 const RoundedRectangleBorder(borderRadius: BorderRadius.zero),

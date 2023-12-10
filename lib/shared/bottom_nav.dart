@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:quizapp/payment/packages_available.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
@@ -24,23 +25,24 @@ class BottomNavBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(
-            FontAwesomeIcons.circleUser,
+            FontAwesomeIcons.cashRegister,
             size: 20,
           ),
-          label: 'Profile',
+          label: 'Subscribtions',
         ),
       ],
       fixedColor: Colors.deepPurple[200],
       onTap: (int idx) {
         switch (idx) {
           case 0:
-            // do nothing
+            Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
             break;
           case 1:
             Navigator.pushNamed(context, '/about');
             break;
           case 2:
-            Navigator.pushNamed(context, '/profile');
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const PackagesAvailable()));
             break;
         }
       },
